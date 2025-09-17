@@ -1,6 +1,6 @@
-# Curso de Machine Learning
+# MP0374-ADMINISTRACIÓ DE SISTEMES OPERATIUS
 
-Este repositorio contiene el material del curso de Machine Learning desarrollado por Mireia Consarnau.
+
 
 ## Contenido
 
@@ -21,5 +21,5 @@ El contenido está bajo licencia [Creative Commons BY-NC-SA 3.0 ES](LICENSE.md).
 
 ---
 
-© 2025 Mireia Consarnau
+© 2025 Josep Pellisa
 
