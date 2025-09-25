@@ -20,7 +20,7 @@
     
     
       
-        <title>Unitat 1 - MP0374-ADMINISTRACIÓ DE SISTEMES OPERATIUS</title>
+        <title>Pràtica 1 - MP0374-ADMINISTRACIÓ DE SISTEMES OPERATIUS</title>
       
     
     
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Unitat 1
+              Pràtica 1
             
           </span>
         </div>
@@ -215,7 +215,7 @@
         
   
   <span class="md-ellipsis">
-    Unitat 1
+    Pràtica 1
   </span>
   
 
@@ -275,23 +275,54 @@
                   
 
 
-  <h1>Unitat 1</h1>
+  <h1>Pràtica 1</h1>
 
-<p>Aquest sera la Unitat 1</p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_002.png" />
-foto1
-<img alt="Captura" src="../custom/Selecci%C3%B3_005.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_008.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_011.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_012.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_013.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_014.png" /></p>
+<p>En aquesta pràctica treballarem amb <strong>systemd</strong>.</p>
+<p>Crearem un <strong>target</strong> personalitzat per agrupar serveis.  </p>
+<p>També configurarem un <strong>servei</strong> que executarà un script.  </p>
+<p>L’script realitzarà una acció simple per comprovar el funcionament.  </p>
+<p>Finalment, activarem i provarem tot el conjunt dins del sistema.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_002.png" /></p>
+<p>Primer que tot crearem el Target.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_025.png" />
+He creat un target que s'activa quan tot està llest: xarxa, usuaris i escriptori. Així controlo que els meus serveis s'inicïen en l'ordre correcte i amb totes les dependències satisfetes.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_005.png" />
+Aqui creem aquest directori perquè és on systemd busca els serveis que han d'activar-se quan el teu target <code>pellisa.target</code> s'iniciï. Els enllaços simbòlics dels serveis que vulguis que s'executin amb el teu target aniran aquí dins.</p>
 <p><img alt="Captura" src="../custom/Selecci%C3%B3_022.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_023.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_024.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_025.png" /></p>
-<p><img alt="Captura" src="../custom/Selecci%C3%B3_027.png" /></p>
+<p>Hem configurat el sistema perquè utilitzi el nostre target personalitzat com a target per defecte. </p>
+<ol>
+<li><strong><code>systemctl set-default pellisa.target</code></strong> - Crea un enllaç simbòlic per definir el nostre target com a predeterminat</li>
+<li><strong><code>systemctl get-default</code></strong> - Verifica que efectivament <code>pellisa.target</code> és ara el target per defecte</li>
+</ol>
+<p>Ara el sistema sempre arrencarà amb la nostra configuració personalitzada.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_011.png" /></p>
+<p>Ara crearem el servei que tindrem associat al target.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_012.png" /></p>
+<p>Aqui veiem el servei systemd que executara el meu script personalitzat. El servei s'assegura que:</p>
+<ul>
+<li>S'inicia després que la xarxa estigui activa</li>
+<li>Es reinicia automàticament si falla</li>
+<li>Està gestionat pel meu target <code>pellisa.target</code></li>
+<li>És de tipus simple per executar el script directament</li>
+</ul>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_014.png" /></p>
+<p>He activat el servei perquè s'iniciï automàticament amb el target <code>pellisa.target</code>. Systemd ha creat un enllaç simbòlic dins de la carpeta <code>pellisa.target.wants</code>, que és exactament per això que havíem creat aquest directori abans.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_013.png" /></p>
+<p>He recarregat la configuració de systemd perquè detecti el nou servei creat. Això és necessari cada vegada que es crea o modifica un fitxer de servei perquè systemd l'incorpori sense necessitat de reiniciar el sistema.</p>
 <p><img alt="Captura" src="../custom/Selecci%C3%B3_028.png" /></p>
+<p>He programat un script que recull informació del sistema i envia una notificació. El script:</p>
+<ol>
+<li>Crea una carpeta segura i un fitxer amb data/hora</li>
+<li>Captura dades del sistema (hostname, IP, usuaris, espai de disc)</li>
+<li>Guarda tot en un fitxer d'informe</li>
+<li>Envia una notificació d'escriptori amb missatge "hackejada" (és broma, clar!)</li>
+</ol>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_008.png" /></p>
+<p>He donat permisos d'execució al script perquè systemd pugui executar-lo quan el servei s'iniciï. Sense aquest permís, el servei fallaria al intentar executar el script.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_027.png" /></p>
+<p>Aqui ja provem de reinciar l'equip i veiem que ja s'ens carrega el target amb el servei i executa el script, a l'ultima part veiem que ens surt failed ja que, la notificació pop-up, ens genera un error.</p>
+<p><img alt="Captura" src="../custom/Selecci%C3%B3_029.png" /></p>
+<p>I un cop reinciada veiem que s'ens ha generat l'informe amb les dades sensibles de l'equip.</p>
 
 
 
